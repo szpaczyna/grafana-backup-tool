@@ -1,8 +1,8 @@
 
-DOCKER_REPO ?= ysde
-DOCKER_NAME := grafana-backup
-DOCKER_TAG ?= latest
-PLATFORMS ?= linux/amd64,linux/arm/v7
+DOCKER_REPO ?= szpaczyn
+DOCKER_NAME := grafana-backup-tool
+DOCKER_TAG ?= 1.4.2
+PLATFORMS ?= linux/arm64
 
 FULLTAG = $(DOCKER_REPO)/$(DOCKER_NAME):$(DOCKER_TAG)
 
@@ -16,10 +16,10 @@ build:
 push: build
 	docker push $(FULLTAG)
 
-
 buildx_and_push:
 	docker buildx build \
+		--label=build-by=shpaq \
 		--output type=image,name=$(DOCKER_REPO)/$(DOCKER_NAME),push=true \
-	 	--platform linux/amd64,linux/arm/v7 \
+	 	--platform $(PLATFORMS) \
 		--tag $(FULLTAG) \
 	 	--file $(DOCKERFILE) .
